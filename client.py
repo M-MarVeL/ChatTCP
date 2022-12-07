@@ -9,7 +9,7 @@ def client():
     client_socket = socket.socket() ## Instatiate
     client_socket.connect((host, PORT)) ## Connect to the server
 
-    name = server.user()
+    name = input("Insert your name -> ")
     msg = input(" -> ")
 
     while msg.lower().strip() != 'bye':

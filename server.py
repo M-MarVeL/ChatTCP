@@ -14,29 +14,39 @@ def server():
 
     connection, address = serverSocket.accept() ## Accept new connection
     print("Connection from : " + str(address))
-    username = user()
+    username = input("Insert your name -> ")
+
 
     while True:
-        ## Receive data stream, maximum 1024 bytes of data
-        buffer = connection.recv(BUFFER).decode()
-        
-        name = buffer[buffer.find("<") + 1:buffer.find(">")] ## 
-        msg = buffer[buffer.find(":") + 1:]
 
-        if not buffer:
-            ## If buffer empty break
+        valor = msg(connection)
+
+        if valor == 0:
             break
-       ## print("From connected user: " + str(buffer)) <<-- Original Print
 
-        print(name + ": " + msg)
-        data = input(' -> ')
-        buffer = (f"<{username}>:{data}")
-        connection.send(buffer.encode()) ## Send data to the client
+        data(connection, username)
 
     connection.close() ## Close the connection
 
-def user():
-    return input("Insert your name -> ")
+
+
+def msg(connection):
+    buffer = connection.recv(BUFFER).decode()
+
+    name = buffer[buffer.find("<") + 1:buffer.find(">")] ## 
+    msg = buffer[buffer.find(":") + 1:]
+
+    if not buffer:
+        ## If buffer is empty break
+        return 0
+    else:
+        print(name + ": " + msg)
+    
+    
+def data(connection, username): 
+    data = input(" -> ")
+    buffer = (f"<{username}>:{data}")
+    connection.send(buffer.encode())
 
 if __name__ == '__main__':
     server()
